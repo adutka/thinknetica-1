@@ -59,7 +59,20 @@ expect(assigns(:question)).to eq question
     it'renders edit view' do
       expect(:response).to render_template :edit
     end
+  end
 
+  describe 'POST #create' do
+    let(:question) { create(:question) }
+
+    context 'with valid attributes' do
+      it 'saves the new question in the database' do
+        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+      end
+      it 'redirects to show view' do
+        post :create, question: attributes_for(:question)
+        expect(response).to redirect_to question_path(assigns(:question))
+      end
+    end
   end
 
 
