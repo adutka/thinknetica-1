@@ -23,6 +23,10 @@ describe 'POST #create' do
       expect { post :create, question_id: question, answer: attributes_for(:invalid_answer) }.to_not change(question.answers, :count)
     end
 
+    it 'new answer does not exist' do
+      expect { post :create, question_id: question, answer: attributes_for(:invalid_answer) }.to change(question.answers, :count).by(0)
+    end
+
     it 'redirects to show view' do
       post :create, question_id: question, answer: attributes_for(:invalid_answer)
       expect(response).to render_template 'questions/show'
