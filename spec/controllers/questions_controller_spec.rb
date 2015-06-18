@@ -33,10 +33,12 @@ describe QuestionsController do
     end
   end
 
-    describe 'GET #new' do
+  describe 'GET #new' do
+    sign_in
     before do
       get :new
     end
+
 
     it 'assigns a new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
@@ -47,7 +49,9 @@ describe QuestionsController do
     end
   end
 
+
   describe 'GET #edit' do
+    sign_in
     before do
       get :edit, id: question
     end
@@ -62,6 +66,7 @@ expect(assigns(:question)).to eq question
   end
 
   describe 'POST #create' do
+    sign_in
     let(:question) { create(:question) }
 
     context 'with valid attributes' do
@@ -82,6 +87,41 @@ expect(assigns(:question)).to eq question
       it 're-renders new view' do
         post :create, question: attributes_for(:invalid_question)
         expect(response).to render_template :new
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    sign_in
+    context 'with valid attributes' do
+      it 'saves the new question in the database' do
+        patch :update, id: question, question: attributes_for(:question)
+        expect(assigns(:question)).to eq question
+      end
+      it 'change question attributes' do
+        patch :update, id: question, question: { title: 'new title', body: 'new body' }
+        question.reload
+        expect(question.title).to eq 'MyTitle'
+        expect(question.body).to eq 'MyText-MyText'
+      end
+      it 'redirect to updated question' do
+        patch :update, id: question, question: attributes_for(:question)
+        expect(response).to redirect_to question_path
+      end
+    end
+
+    context 'with invalid attributes' do
+
+      it 'does not change question attributes' do
+        patch :update, id: question, question: { title: 'new title', body: nil }
+        question.reload
+        expect(question.title).to eq 'MyTitle'
+        expect(question.body).to eq 'MyText-MyText'
+      end
+
+      it 're-renders edit view' do
+        patch :update, id: question, question: { title: 'new title', body: nil }
+        expect(:response).to render_template :edit
       end
     end
   end
