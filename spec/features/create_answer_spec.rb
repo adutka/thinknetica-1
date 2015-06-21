@@ -15,10 +15,10 @@ feature 'create answer to question', %q{
 
     visit questions_path
     save_and_open_page
-    fill_in 'Body', with: answer.body
+    fill_in 'Body', with: 'MyText-MyText'
     click_on 'Create'
-    expect(page).to have_content('Your answer successfully created.')
-    expect(current_path).to eq(question_path(question))
+    expect(page).to have_content 'Your answer successfully created.'
+    expect(current_path).to eq question_path (question)
 
   end
 end
