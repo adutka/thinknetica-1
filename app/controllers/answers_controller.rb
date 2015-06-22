@@ -6,6 +6,7 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build(answer_params)
     if @answer.save
       redirect_to @question
+      flash[:notice] = 'Your answer successfully created.'
     else
       render 'questions/show'
     end

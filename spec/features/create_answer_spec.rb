@@ -13,12 +13,10 @@ feature 'create answer to question', %q{
   scenario 'Authenticated user creates answer' do
     sign_in(user)
 
-    visit questions_path
-    save_and_open_page
-    fill_in 'Body', with: 'MyText-MyText'
-    click_on 'Create'
+    visit question_path (question)
+    fill_in 'answer[body]', with: 'Some Answer body'
+    click_on 'To Answer'
     expect(page).to have_content 'Your answer successfully created.'
     expect(current_path).to eq question_path (question)
-
   end
 end
