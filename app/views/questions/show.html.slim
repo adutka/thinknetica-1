@@ -9,7 +9,12 @@ hr
   =f.text_area :body
   =f.submit 'Create'
 
+
+
 = form_for([@question, @answer], remote: true) do |f|
     = f.label :body
     = f.text_area :body
     = f.submit 'To Answer'
+
+
+= link_to 'Delete question', question_path(@question), method: :delete
