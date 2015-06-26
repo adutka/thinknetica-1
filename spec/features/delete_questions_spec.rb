@@ -7,7 +7,7 @@ feature 'delete question', %q{
 } do
 
   given(:user) { create(:user) }
-  # given(:user1) { create(:user) }
+  given(:non_author) { create(:user) }
   given(:question) { create(:question) }
 
   scenario 'Authenticated user can delete his question' do
@@ -17,5 +17,18 @@ feature 'delete question', %q{
     click_on 'Delete question'
     expect(page).to have_content 'Question successfully deleted.'
     expect(page).to_not have_content(question.title)
+  end
+
+  scenario 'Non-author of the question tries to delete question' do
+    sign_in(non_author)
+    visit question_path(question)
+
+    expect(page).to have_content question.title
+  end
+
+  scenario 'Non-authenticated user tries to delete question' do
+    visit question_path(question)
+
+    expect(page).to have_content question.title
   end
 end

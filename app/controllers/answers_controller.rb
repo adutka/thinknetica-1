@@ -4,11 +4,11 @@ class AnswersController < ApplicationController
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
-    # @answer.user = current_user
     if @answer.save
       redirect_to @question
       flash[:notice] = 'Your answer successfully created.'
     else
+      flash[:notice] = "Answer body can't be blank."
       render 'questions/show'
     end
   end
@@ -21,7 +21,7 @@ class AnswersController < ApplicationController
     if @answer.destroy
       redirect_to question_path(@question), notice: "Your answer successfully deleted."
     else
-      redirect_to @question, alert: "It's not your answer!"
+      redirect_to @question, alert: "It's impossible to delete the answer"
     end
   end
 

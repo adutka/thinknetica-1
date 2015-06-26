@@ -8,7 +8,9 @@ feature 'delete answer in question', %q{
 } do
 
   given(:user) { create(:user) }
+  given(:non_author) { create(:user) }
   given!(:answer) { create(:answer, user: user) }
+
 
   scenario 'authenticated user can delete his answer' do
     sign_in(answer.user)
@@ -21,5 +23,18 @@ feature 'delete answer in question', %q{
 
     expect(page).to have_content 'Your answer successfully deleted.'
     expect(page).to_not have_content(answer.body)
+  end
+
+  scenario 'non-authenticated user tries to delete answer' do
+    visit question_path(answer.question)
+
+    expect(page).to have_content answer.body
+  end
+
+  scenario "authenticated user tries to delete somebody's answer" do
+    sign_in(non_author)
+
+    visit question_path(answer.question)
+    expect(page).to have_content answer.body
   end
 end
