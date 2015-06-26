@@ -11,7 +11,7 @@ feature 'View answers in Question', %q{
   given!(:answer) { create(:answer, question: question) }
 
   scenario "User can see answers for question" do
-    visit questions_path
+    visit question_path(question)
 
     question.answers.each do |n|
       expect(page).to have_content(n.body)

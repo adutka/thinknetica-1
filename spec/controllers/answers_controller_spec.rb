@@ -34,5 +34,7 @@ describe 'POST #create' do
       expect(response).to render_template 'questions/show'
     end
   end
+
+
 end
 end

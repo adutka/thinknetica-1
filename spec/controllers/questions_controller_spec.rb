@@ -67,7 +67,7 @@ expect(assigns(:question)).to eq question
 
   describe 'POST #create' do
     sign_in
-    let(:question) { create(:question) }
+    # let(:question) { create(:question) }
 
     context 'with valid attributes' do
       it 'saves the new question in the database' do
@@ -101,8 +101,8 @@ expect(assigns(:question)).to eq question
       it 'change question attributes' do
         patch :update, id: question, question: { title: 'new title', body: 'new body' }
         question.reload
-        expect(question.title).to eq 'MyTitle'
-        expect(question.body).to eq 'MyText-MyText'
+        expect(question.title).to eq 'new title'
+        expect(question.body).to eq 'new body'
       end
       it 'redirect to updated question' do
         patch :update, id: question, question: attributes_for(:question)
@@ -116,7 +116,7 @@ expect(assigns(:question)).to eq question
         patch :update, id: question, question: { title: 'new title', body: nil }
         question.reload
         expect(question.title).to eq 'MyTitle'
-        expect(question.body).to eq 'MyText-MyText'
+        expect(question.body).to eq 'My question lalala'
       end
 
       it 're-renders edit view' do

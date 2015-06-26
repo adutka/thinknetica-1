@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :answer do
     body "MyText-MyText"
     question
-    # user
+    user
   end
 
   factory :invalid_answer, class: 'Answer' do

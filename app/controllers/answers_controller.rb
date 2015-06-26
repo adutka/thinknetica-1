@@ -3,7 +3,8 @@ class AnswersController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    @answer = @question.answers.build(answer_params)
+    @answer = @question.answers.new(answer_params)
+    # @answer.user = current_user
     if @answer.save
       redirect_to @question
       flash[:notice] = 'Your answer successfully created.'
@@ -12,9 +13,21 @@ class AnswersController < ApplicationController
     end
   end
 
+
+  def destroy
+    @answer = Answer.find(params[:id])
+    @question = @answer.question
+
+    if @answer.destroy
+      redirect_to question_path(@question), notice: "Your answer successfully deleted."
+    else
+      redirect_to @question, alert: "It's not your answer!"
+    end
+  end
+
   private
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, :question_id)
   end
 end
