@@ -4,4 +4,5 @@ class Answer < ActiveRecord::Base
 
   validates :question_id, presence: true
   validates :body, length: { in: 5..1000 }, presence: true
+  validates :user_id, presence: true
 end

@@ -8,7 +8,7 @@ feature 'delete question', %q{
 
   given(:user) { create(:user) }
   given(:non_author) { create(:user) }
-  given(:question) { create(:question) }
+  given(:question) { create(:question, user: user) }
 
   scenario 'Authenticated user can delete his question' do
     sign_in(user)
@@ -24,11 +24,13 @@ feature 'delete question', %q{
     visit question_path(question)
 
     expect(page).to have_content question.title
+    expect(page).to_not have_link 'Delete question'
   end
 
   scenario 'Non-authenticated user tries to delete question' do
     visit question_path(question)
 
     expect(page).to have_content question.title
+    expect(page).to_not have_link 'Delete question'
   end
 end

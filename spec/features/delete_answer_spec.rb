@@ -29,6 +29,7 @@ feature 'delete answer in question', %q{
     visit question_path(answer.question)
 
     expect(page).to have_content answer.body
+    expect(page).to_not have_link 'Delete answer'
   end
 
   scenario "authenticated user tries to delete somebody's answer" do
@@ -36,5 +37,6 @@ feature 'delete answer in question', %q{
 
     visit question_path(answer.question)
     expect(page).to have_content answer.body
+    expect(page).to_not have_link 'Delete answer'
   end
 end

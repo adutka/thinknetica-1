@@ -7,7 +7,7 @@ feature 'create answer to question', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given(:question) { create :question }
   given(:answer) { build(:answer) }
 
   scenario 'Authenticated user creates answer' do
@@ -17,6 +17,9 @@ feature 'create answer to question', %q{
     fill_in 'answer[body]', with: 'Some Answer body'
     click_on 'To Answer'
     expect(page).to have_content 'Your answer successfully created.'
+    question.answers.each do |qa|
+      expect(page).to have_content(qa.body)
+    end
     expect(current_path).to eq question_path (question)
   end
 
