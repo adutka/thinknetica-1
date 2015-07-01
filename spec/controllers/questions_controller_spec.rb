@@ -154,12 +154,12 @@ expect(assigns(:question)).to eq question
 
       it 'doesn\'t delete question' do
         another_user_question
-        expect { delete :destroy, id: question }.not_to change(Question, :count)
+        expect { delete :destroy, id: another_user_question }.not_to change(Question, :count)
       end
 
-      it 'redirects to questions_path' do
+      it 'redirects to question_path' do
         delete :destroy, id: another_user_question
-        expect(response).to redirect_to questions_path
+        expect(response).to redirect_to question_path
       end
     end
   end

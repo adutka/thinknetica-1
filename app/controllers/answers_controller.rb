@@ -20,9 +20,8 @@ class AnswersController < ApplicationController
   def destroy
     @answer = Answer.find(params[:id])
     @question = @answer.question
-    @answer.user_id == current_user.id
-
-    if @answer.destroy
+    if @answer.user_id == current_user.id
+      @answer.destroy
       redirect_to question_path(@question), notice: "Your answer successfully deleted."
     else
       redirect_to @question, alert: "It's impossible to delete the answer"

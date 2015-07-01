@@ -64,8 +64,9 @@ RSpec.describe AnswersController, type: :controller do
       let(:another_user_answer) { create(:answer, user: another_user, question: question) }
 
       it 'does not remove question from the database' do
+        another_user_answer
         expect do
-          delete :destroy, question_id: question, id: answer
+          delete :destroy, question_id: question, id: another_user_answer
         end.not_to change(Answer, :count)
       end
 

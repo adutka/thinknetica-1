@@ -8,7 +8,8 @@ feature 'View answers in Question', %q{
 
   given(:user) { create(:user) }
   given!(:question) { create(:question) }
-  given!(:answer) { create(:answer, question: question) }
+  given!(:answer1) { create(:answer, question: question) }
+  given!(:answer2) { create(:answer, question: question) }
 
   scenario "User can see answers for question" do
     visit question_path(question)
