@@ -6,8 +6,10 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
+    ap params
+    ap @answer
     if @answer.save
-      # flash[:notice] = 'Your answer successfully created.'
+      flash[:notice] = 'Your answer successfully created.'
       # redirect_to @question
 
     else
