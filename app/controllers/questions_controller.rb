@@ -1,11 +1,14 @@
 class QuestionsController < ApplicationController
-  before_action :load_question, only: [:show, :edit]
+  before_action :authenticate_user!, only: [ :new, :create ]
+  before_action :load_question, only: [:show, :edit, :update, :destroy ]
 
   def index
     @questions = Question.all
   end
 
   def show
+    @answers = @question.answers
+    @answer = Answer.new
   end
 
   def new
@@ -17,15 +20,32 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
-      if @question.save
-        redirect_to question_path(@question)
-      else
-        render :new
-      end
+    @question.user = current_user
+    if @question.save
+      flash[:notice] = 'Created question'
+      redirect_to question_path(@question)
+    else
+      render :new
+    end
   end
 
+  def update
+    if @question.update(question_params)
+      redirect_to question_path(@question)
+    else
+      render :edit
+    end
+  end
 
-
+  def destroy
+      if @question.user_id == current_user.id
+        @question.destroy
+        flash[:notice] = 'Question successfully deleted.'
+        redirect_to questions_path
+      else
+        redirect_to @question, alert: "It's impossible to delete this question"
+      end
+  end
 
   private
 

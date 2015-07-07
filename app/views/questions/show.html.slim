@@ -1,0 +1,16 @@
+h2= @question.title
+p =@question.body
+hr
+
+- @question.answers.each do |answer|
+  - if answer.persisted?
+    p= answer.body
+    = link_to 'Delete answer', answer, method: :delete if current_user && current_user.id == answer.user_id
+
+= form_for([@question, @answer]) do |f|
+  = f.label :body
+  = f.text_area :body
+
+  = f.submit 'To Answer'
+
+= link_to 'Delete question', question_path(@question), method: :delete if current_user && current_user.id == @question.user_id

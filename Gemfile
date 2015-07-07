@@ -43,6 +43,7 @@ group :development, :test do
   gem 'spring'
 
   gem 'slim-rails'
+  gem 'devise'
 
   group :test, :development do
     gem 'rspec-rails'
@@ -52,6 +53,8 @@ group :development, :test do
   group :test do
 
     gem 'shoulda-matchers'
+    gem 'capybara'
+    gem 'launchy' #for open page in browser
   end
 end
 
