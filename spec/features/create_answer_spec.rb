@@ -11,7 +11,7 @@ feature 'create answer to question', %q{
   given(:answer) { build(:answer) }
 
 
-  scenario 'Authenticated user creates answer' do
+  scenario 'Authenticated user creates answer', js: true do
     sign_in(user)
 
     visit question_path (question)

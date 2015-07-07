@@ -18,7 +18,7 @@ feature 'delete answer in question', %q{
     visit question_path(answer.question)
     # byebug
     # 1==1
-    save_and_open_page
+    # save_and_open_page
     click_link 'Delete answer'
 
     expect(page).to have_content 'Your answer successfully deleted.'

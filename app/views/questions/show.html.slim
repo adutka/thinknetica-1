@@ -2,12 +2,10 @@ h2= @question.title
 p =@question.body
 hr
 
-- @question.answers.each do |answer|
-  - if answer.persisted?
-    p= answer.body
-    = link_to 'Delete answer', answer, method: :delete if current_user && current_user.id == answer.user_id
+.answers
+  = render @question.answers
 
-= form_for([@question, @answer]) do |f|
+= form_for [@question, @answer], remote: true do |f|
   = f.label :body
   = f.text_area :body
 

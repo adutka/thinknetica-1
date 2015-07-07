@@ -55,6 +55,8 @@ group :development, :test do
     gem 'shoulda-matchers'
     gem 'capybara'
     gem 'launchy' #for open page in browser
+    gem 'selenium-webdriver'
+    gem 'database_cleaner'
   end
 end
 

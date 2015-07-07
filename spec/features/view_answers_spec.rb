@@ -16,7 +16,6 @@ feature 'View answers in Question', %q{
 
     question.answers.each do |n|
       expect(page).to have_content(n.body)
-      # save_and_open_page
     end
   end
 end
