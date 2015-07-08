@@ -32,7 +32,7 @@ feature 'create answer to question', %q{
     expect(page).to have_content 'Log in'
   end
 
-   scenario 'Authenticated user tries to create wrong answer' do
+   scenario 'Authenticated user tries to create wrong answer', js: true do
     sign_in(user)
 
     visit question_path(question)

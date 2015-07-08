@@ -1,3 +1,8 @@
-
-$('.answers').append('<%= j render @answer %>');
-$('#answer_body').val(''); // clear body in answer template
+<% if @answer.errors.present? %>
+  <% @answer.errors.full_messages.each do |message| %>
+        $('#answer_body').before('<%= j message %>');
+  <% end %>
+<% else %>
+  $('.answers').html('<%= j render @answer %>');
+  $(' #answer_body').val(''); // clear body in answer template
+<% end %>
