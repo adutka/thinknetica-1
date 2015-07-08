@@ -1,0 +1,4 @@
+
+  - if answer.persisted?
+    p= answer.body
+    = link_to 'Delete answer', answer, method: :delete if current_user && current_user.id == answer.user_id

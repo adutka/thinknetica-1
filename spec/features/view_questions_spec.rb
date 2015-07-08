@@ -15,7 +15,6 @@ feature 'View questions', %q{
 
     questions.each do |question|
       expect(page).to have_link question.title
-      save_and_open_page
     end
   end
 end
