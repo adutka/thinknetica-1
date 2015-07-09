@@ -1,8 +1,12 @@
+<% if @message %>
+  $('.notice').html('<%= @message %>');
+<% end %>
 <% if @answer.errors.present? %>
   <% @answer.errors.full_messages.each do |message| %>
-        $('#answer_body').before('<%= j message %>');
+  $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('.answers').html('<%= j render @answer %>');
+  $('.answers').html('<%= j render @question.answers %>');
+  $('.answer-errors').html('');
   $(' #answer_body').val(''); // clear body in answer template
 <% end %>

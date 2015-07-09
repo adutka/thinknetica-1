@@ -2,7 +2,7 @@
 
 
 h3 Questions
-= @questions.each do |question|
+- @questions.each do |question|
   ul
     li
-      = link_to question.title, question_answers_path(question)
+      = link_to question.title, question_path(question)
