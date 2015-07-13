@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :questions do
-    resources :answers
+    resources :answers do
+      post '/best' => 'answers#best'
+      post '/cancel_best' => 'answers#cancel_best'
+    end
   end
 
   root to: "questions#index"

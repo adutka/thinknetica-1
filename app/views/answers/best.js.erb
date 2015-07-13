@@ -1,0 +1,4 @@
+<% if @message %>
+  $('.notice').html('<%= @message %>');
+<% end %>
+$('.answers').html(' <%= j render @question.answers %> ');

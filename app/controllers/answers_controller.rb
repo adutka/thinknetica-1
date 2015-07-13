@@ -20,6 +20,10 @@ class AnswersController < ApplicationController
     end
   end
 
+  def update
+    @answer.update(answers_params)
+    @question = @answer.question
+  end
 
   def destroy
     @answer = Answer.find(params[:id])
@@ -33,24 +37,23 @@ class AnswersController < ApplicationController
   end
 
   def best
-      if @question.user == current_user
-        @answer.select_best
-        @answers = @question.answers
-        render 'answers'
-      else
-        redirect_to root_url
-      end
+    if @question.user == current_user
+      @answer.select_best
+      @answers = @question.answers
+      @message = "The Best answer"
+    else
+      redirect_to root_url
     end
+  end
 
-    def cancel_best
-      if @question.user == current_user
-        @answer.cancel_best
-        @answers = @question.answers
-        render 'answers'
-      else
-        redirect_to root_url
-      end
+  def cancel_best
+    if @question.user == current_user
+      @answer.cancel_best
+      @answers = @question.answers
+    else
+      redirect_to root_url
     end
+  end
 
 
   private
@@ -61,6 +64,10 @@ class AnswersController < ApplicationController
 
   def load_question_and_answer
     @question = Question.find(params[:question_id])
-    @answer = @question.answers.find(params[:id]) if params[:id]
+    # ap 'params[:id]'
+    # ap params[:answer_id]
+    id = params[:id] || params[:answer_id]
+    # ap id
+    @answer = @question.answers.find(id) if id
   end
 end
