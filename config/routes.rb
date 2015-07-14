@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   resources :questions do
     resources :answers do
       post '/best' => 'answers#best'
-      post '/cancel_best' => 'answers#cancel_best'
     end
   end
 

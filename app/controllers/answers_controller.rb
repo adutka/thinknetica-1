@@ -1,15 +1,15 @@
 
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy]
-  before_action :load_question_and_answer, only: [:index, :new, :create, :update, :best, :cancel_best]
+  before_action :authenticate_user!, only: [:create, :destroy, :best]
+  before_action :load_question_and_answer, only: [:index, :create, :update, :best]
 
   def index
-    @question = Question.find(params[:question_id])
-    @answers = @question.answers
+    # @question = Question.find(params[:question_id])
+    @answers = @question.answers.order('best DESC')
   end
 
   def create
-    @question = Question.find(params[:question_id])
+    # @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
 
@@ -40,21 +40,11 @@ class AnswersController < ApplicationController
     if @question.user == current_user
       @answer.select_best
       @answers = @question.answers
-      @message = "The Best answer"
+      @message = "The Best answer is #{@answer.body}"
     else
-      redirect_to root_url
+      @message = "This is not your answer"
     end
   end
-
-  def cancel_best
-    if @question.user == current_user
-      @answer.cancel_best
-      @answers = @question.answers
-    else
-      redirect_to root_url
-    end
-  end
-
 
   private
 

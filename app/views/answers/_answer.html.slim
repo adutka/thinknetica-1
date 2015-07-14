@@ -1,6 +1,7 @@
-p= answer.body
-= link_to 'Delete answer', answer, remote: true, method: :delete if current_user && current_user.id == answer.user_id
+div class=(answer.best ? 'best' : '')
+  p= answer.body
+  = link_to 'Delete answer', answer, remote: true, method: :delete if current_user && current_user.id == answer.user_id
 
-<br />
-= link_to "Best answer", question_answer_best_path(@question, answer), remote: true, method: :post if current_user && current_user.id == answer.user_id
+  <br />
+  = link_to "Best answer", question_answer_best_path(@question, answer), remote: true, method: :post if current_user && current_user.id == answer.user_id
 

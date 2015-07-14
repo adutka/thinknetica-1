@@ -6,12 +6,10 @@ class Answer < ActiveRecord::Base
   validates :body, length: { in: 5..1000 }, presence: true
   validates :user_id, presence: true
 
+  default_scope {order('best DESC')}
+
   def select_best
     question.answers.update_all(best: false)
     update!(best: true)
-  end
-
-  def cancel_best
-    update!(best: false)
   end
 end
