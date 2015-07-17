@@ -76,4 +76,31 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe "POST #best" do
+    let!(:owner) { create(:user) }
+    let!(:question) { create(:question, user: owner) }
+    let!(:answer) { create(:answer, question: question) }
+
+    context "onwer select best answer" do
+
+      it "best answer" do
+        sign_in(owner)
+        post :best, question_id: question, answer_id: answer, format: :js
+        expect(response).to render_template 'answers/best'
+        expect(answer.reload.best).to be true
+      end
+    end
+
+    context "non-onwer select best answer" do
+
+      let!(:non_owner) { create(:user) }
+
+      it "answer is not selected as best" do
+        sign_in(non_owner)
+        post :best, question_id: question, answer_id: answer, format: :js
+        expect(answer.reload.best).to be false
+      end
+    end
+  end
 end
