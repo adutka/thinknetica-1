@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   resources :questions do
     resources :answers do
-      post '/best' => 'answers#best'
+      post :best, on: :member
     end
   end
 
