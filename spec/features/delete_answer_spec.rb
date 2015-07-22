@@ -1,5 +1,4 @@
-
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'delete answer in question', %q{
   In order to remove my answer in question
@@ -12,7 +11,7 @@ feature 'delete answer in question', %q{
   given!(:answer) { create(:answer, user: user) }
 
 
-  scenario 'authenticated user can delete his answer' do
+  scenario 'authenticated user can delete his answer', js: true do
     sign_in(answer.user)
 
     visit question_path(answer.question)
@@ -25,14 +24,14 @@ feature 'delete answer in question', %q{
     expect(page).to_not have_content(answer.body)
   end
 
-  scenario 'non-authenticated user tries to delete answer' do
+  scenario 'non-authenticated user tries to delete answer', js: true  do
     visit question_path(answer.question)
 
     expect(page).to have_content answer.body
     expect(page).to_not have_link 'Delete answer'
   end
 
-  scenario "authenticated user tries to delete somebody's answer" do
+  scenario "authenticated user tries to delete somebody's answer", js: true  do
     sign_in(non_author)
 
     visit question_path(answer.question)

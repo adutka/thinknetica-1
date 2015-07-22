@@ -14,3 +14,8 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+$(document).ajaxError(function (e, xhr, settings) {
+        if (xhr.status == 401) {
+           $('.notice').html(xhr.responseText);
+        }
+    });

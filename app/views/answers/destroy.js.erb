@@ -1,0 +1,5 @@
+<% if @message %>
+  $('.notice').html('<%= @message %>');
+<% end %>
+$('.answers').html('<%= j render @question.answers %>');
+$(' #answer_body').val(''); // clear body in answer template

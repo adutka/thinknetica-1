@@ -5,8 +5,11 @@ hr
 .answers
   = render @question.answers
 
+.answer-errors
+
 = form_for [@question, @answer], remote: true do |f|
   = f.label :body
+
   = f.text_area :body
 
   = f.submit 'To Answer'
