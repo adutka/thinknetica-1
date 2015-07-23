@@ -86,7 +86,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it "best answer" do
         sign_in(owner)
-        post :best, question_id: question, answer_id: answer, format: :js
+        post :best, question_id: question, id: answer, format: :js
         expect(response).to render_template 'answers/best'
         expect(answer.reload.best).to be true
       end
@@ -98,7 +98,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it "answer is not selected as best" do
         sign_in(non_owner)
-        post :best, question_id: question, answer_id: answer, format: :js
+        post :best, question_id: question, id: answer, format: :js
         expect(answer.reload.best).to be false
       end
     end
