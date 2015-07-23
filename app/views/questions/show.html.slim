@@ -1,5 +1,8 @@
 h2= @question.title
 p =@question.body
+
+- @question.attachments.each do |a|
+  li= a.file.file.filename
 hr
 
 .answers

@@ -10,10 +10,11 @@ feature 'Add files to question', %q{
 
   background do
     sign_in(user)
-    # visit new_question_path
+    visit questions_path
   end
 
   scenario 'user adds files when ask question' do
+    click_on 'Ask question'
     fill_in 'Title', with: 'Test question'
     fill_in 'Body', with: 'Text text lala'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
