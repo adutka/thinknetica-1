@@ -6,4 +6,6 @@ class Question < ActiveRecord::Base
   validates :title, length: { in: 3..40 }, presence: true
   validates :body, length: { in: 3..10000 }, presence: true
   validates :user_id, presence: true
+
+  accepts_nested_attributes_for :attachments
 end
