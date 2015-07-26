@@ -18,6 +18,9 @@ class AnswersController < ApplicationController
     else
       "Answer body can't be blank."
     end
+    respond_to do |format|
+      format.html { redirect_to @question }
+    end
   end
 
   def update
@@ -49,7 +52,7 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, attachments_attributes: [:file])
   end
 
   def load_question_and_answer

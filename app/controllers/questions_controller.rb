@@ -10,6 +10,7 @@ class QuestionsController < ApplicationController
     ap 'show'
     @answers = @question.answers.order('best DESC')
     @answer = Answer.new
+    @attachments = @answer.attachments.build
   end
 
   def new

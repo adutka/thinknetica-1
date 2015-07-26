@@ -6,9 +6,9 @@ feature 'create answer to question', %q{
   I want to answer question
 } do
 
-  given(:user) { create(:user) }
-  given(:question) { create :question }
-  given(:answer) { build(:answer) }
+  given!(:user) { create(:user) }
+  given!(:question) { create :question }
+
 
 
   scenario 'Authenticated user creates answer', js: true do
