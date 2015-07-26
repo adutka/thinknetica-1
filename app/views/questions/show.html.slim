@@ -11,7 +11,7 @@ hr
 .answer-errors
 
 = form_for [@question, @answer], remote: true do |f|
-  = f.hidden_field_tag "authenticity_token", form_authenticity_token
+  = hidden_field_tag :authenticity_token, form_authenticity_token
   = f.label :body
 
   = f.text_area :body
