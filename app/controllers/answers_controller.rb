@@ -20,6 +20,7 @@ class AnswersController < ApplicationController
       "Answer body can't be blank."
     end
     respond_to do |format|
+      format.js
       format.html { redirect_to @question }
     end
   end
