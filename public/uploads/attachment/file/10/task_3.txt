@@ -1,0 +1,41 @@
+После жарких дебатов, было принято решение, что необходимо внести изменения в архитектуру нашей библиотеки.
+
+Класс LibraryManager теперь должен обслуживать много книг и читателей. Также в него включена новая функциональность - компоновка полезных сообщений.
+
+Для читателя:
+
+Dear Ivan Testenko!
+
+You should return a book "War and Peace" authored by Leo Tolstoy in 36 hours.
+
+Otherwise you will be charged $12.30 per hour.
+
+By the way, you are on 333 page now and you need 5.40 hours to finish reading "War and Peace"
+
+Для библиотекаря:
+
+Hello,
+
+There are 5 published books in the library.
+
+There are 6 readers and 3 of them are reading the books.
+
+Ivan Testenko is reading "War and Peace" - should return on 2015-07-04 at 10am - 5.00 hours of reading is needed to finish.
+
+Vasiliy Pupkin is reading "Red and Black" - should return on 2015-07-12 at 7pm  - 12.75 hours of reading is needed to finish.
+
+Barak Obama is reading "The Well-Grounded Rubyist" - should return on 2015-07-10 at 12pm  - 44.50 hours of reading is needed to finish.
+
+Для статистики:
+
+Hello,
+
+The library has: 5 books,  4 authors, 6 readers
+
+The most popular author is Leo Tolstoy: 2450 pages has been read by 4 readers in 2 books.
+
+The most productive reader is Ivan Testenko: he had read 1040 pages in 3 books authored by 3 authors.
+
+The most popular book is "The Well-Grounded Rubyist" authored by David A. Black: it had been read for 123.00 hours by 5 readers.
+
+Заготовка - https://github.com/it-person/ruby_bursa_task_3

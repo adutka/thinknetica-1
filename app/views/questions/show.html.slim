@@ -2,7 +2,8 @@ h2= @question.title
 p =@question.body
 
 - @question.attachments.each do |a|
-  li= link_to a.file.identifier, a.file.url
+  -if a.file.file
+    li= link_to a.file.identifier, a.file.url
 hr
 
 .answers
