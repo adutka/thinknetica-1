@@ -11,17 +11,6 @@ hr
 
 .answer-errors
 
-= form_for [@question, @answer], remote: true do |f|
-  = hidden_field_tag :authenticity_token, form_authenticity_token
-  = f.label :body
-
-  = f.text_area :body
-
-  p Attachments:
-  p
-    =f.fields_for :attachments do |a|
-      =a.label :file
-      =a.file_field :file
-  = f.submit 'To Answer'
+= render 'answers/form'
 
 = link_to 'Delete question', question_path(@question), method: :delete if current_user && current_user.id == @question.user_id

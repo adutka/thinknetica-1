@@ -1,7 +1,7 @@
 
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy, :best]
-  before_action :load_question_and_answer, only: [:index, :create, :update, :best]
+  before_action :authenticate_user!
+  before_action :load_question_and_answer, except: :destroy
 
   def index
     # @question = Question.find(params[:question_id])
@@ -25,9 +25,13 @@ class AnswersController < ApplicationController
     end
   end
 
+  def edit
+  end
+
   def update
-    @answer.update(answers_params)
+    @answer.update(answer_params)
     @question = @answer.question
+    redirect_to question_path(@question)
   end
 
   def destroy

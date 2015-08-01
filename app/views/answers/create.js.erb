@@ -6,7 +6,11 @@
   $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
+if ($('.answers').size() != 0){
   $('.answers').html('<%= j render @question.answers %>');
   $('.answer-errors').html('');
   $(' #answer_body').val(''); // clear body in answer template
+} else {
+  $(location).attr('href', "<%= question_url(@question) %>");
+}
 <% end %>

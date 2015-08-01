@@ -3,6 +3,9 @@ div class=(answer.best ? 'best' : '')
   - answer.attachments.each do |a|
     li= link_to a.file.identifier, a.file.url
 
+  = link_to 'Edit answer', edit_question_answer_path(@question, answer) if current_user && current_user.id == answer.user_id
+
+  <br />
   = link_to 'Delete answer', answer, remote: true, method: :delete if current_user && current_user.id == answer.user_id
 
   <br />
