@@ -10,7 +10,7 @@ class AnswersController < ApplicationController
 
   def create
     # @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.build(answer_params)
     @answer.user = current_user
     # byebug
 
@@ -58,7 +58,7 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body, attachments_attributes: [:id, :file, :_destroy ])
+    params.require(:answer).permit(:body, attachments_attributes: [ :id, :file, :_destroy ])
   end
 
   def load_question_and_answer
