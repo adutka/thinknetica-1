@@ -1,6 +1,12 @@
 div class=(answer.best ? 'best' : '')
   p= answer.body
+  - answer.attachments.each do |a|
+    li= link_to a.file.identifier, a.file.url
+
+  = link_to 'Edit answer', edit_question_answer_path(@question, answer) if current_user && current_user.id == answer.user_id
+
+  <br />
   = link_to 'Delete answer', answer, remote: true, method: :delete if current_user && current_user.id == answer.user_id
 
   <br />
-  = link_to "#{ answer.best ? 'Cancel Best answer' : 'Best answer' }", question_answer_best_path(@question, answer), remote: true, method: :post if current_user && current_user.id == answer.user_id
+  = link_to "#{ answer.best ? 'Cancel Best answer' : 'Best answer' }", best_question_answer_path(@question, answer), remote: true, method: :post if current_user && current_user.id == answer.user_id

@@ -1,7 +1,7 @@
 
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy, :best]
-  before_action :load_question_and_answer, only: [:index, :create, :update, :best]
+  before_action :authenticate_user!
+  before_action :load_question_and_answer, except: :destroy
 
   def index
     # @question = Question.find(params[:question_id])
@@ -10,19 +10,28 @@ class AnswersController < ApplicationController
 
   def create
     # @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.build(answer_params)
     @answer.user = current_user
+    # byebug
 
     @message = if @answer.save
       'Your answer successfully created.'
     else
       "Answer body can't be blank."
     end
+    respond_to do |format|
+      format.js
+      format.html { redirect_to @question }
+    end
+  end
+
+  def edit
   end
 
   def update
-    @answer.update(answers_params)
+    @answer.update(answer_params)
     @question = @answer.question
+    redirect_to question_path(@question)
   end
 
   def destroy
@@ -49,7 +58,7 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, attachments_attributes: [ :id, :file, :_destroy ])
   end
 
   def load_question_and_answer
