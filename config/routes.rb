@@ -5,10 +5,16 @@ Rails.application.routes.draw do
       post :best, on: :member
     end
   end
-
+  resources :questions do
+    member { post :vote }
+  end
   root to: "questions#index"
 
   resources :answers, only: [:destroy]
+
+
+
+  # resources :votes, only: [:show]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -13,6 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require handlebars
+//= require_tree ./templates
 //= require_tree .
 //= require jquery_nested_form
 $(document).ajaxError(function (e, xhr, settings) {

@@ -9,10 +9,10 @@ class AnswersController < ApplicationController
   end
 
   def create
+    ap 'create'
     # @question = Question.find(params[:question_id])
     @answer = @question.answers.build(answer_params)
     @answer.user = current_user
-    # byebug
 
     @message = if @answer.save
       'Your answer successfully created.'
@@ -21,6 +21,7 @@ class AnswersController < ApplicationController
     end
     respond_to do |format|
       format.js
+      format.json { render json: @answer }
       format.html { redirect_to @question }
     end
   end
@@ -29,9 +30,14 @@ class AnswersController < ApplicationController
   end
 
   def update
+    ap 'update'
     @answer.update(answer_params)
     @question = @answer.question
-    redirect_to question_path(@question)
+
+    respond_to do |format|
+      format.json { render json: @answer }
+      format.html { redirect_to @question }
+    end
   end
 
   def destroy

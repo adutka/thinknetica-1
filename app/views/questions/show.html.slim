@@ -4,6 +4,7 @@ p =@question.body
 - @question.attachments.each do |a|
   -if a.file.file
     li= link_to a.file.identifier, a.file.url
+
 hr
 
 .answers

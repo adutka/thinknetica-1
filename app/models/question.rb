@@ -8,4 +8,6 @@ class Question < ActiveRecord::Base
   validates :user_id, presence: true
 
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :all_blank
+
+  has_reputation :votes, source: :user, aggregated_by: :sum
 end

@@ -1,9 +1,10 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, only: [ :new, :create ]
-  before_action :load_question, only: [:show, :edit, :update, :destroy ]
+  before_action :load_question, only: [:show, :edit, :update, :destroy, :vote ]
 
   def index
-    @questions = Question.all
+    # @questions = Question.all
+    @questions = Question.find_with_reputation(:votes, :all, order: "votes desc")
   end
 
   def show
@@ -49,6 +50,16 @@ class QuestionsController < ApplicationController
         redirect_to @question, alert: "It's impossible to delete this question"
       end
   end
+
+
+
+  def vote
+    value = params[:type] == "up" ? 1 : -1
+    @question.add_evaluation(:votes, value, current_user)
+    redirect_to :back, notice: "Thank you for voting!"
+  end
+
+
 
   private
 
