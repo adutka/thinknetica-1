@@ -10,3 +10,11 @@ div class=(answer.best ? 'best' : '')
 
   <br />
   = link_to "#{ answer.best ? 'Cancel Best answer' : 'Best answer' }", best_question_answer_path(@question, answer), remote: true, method: :post if current_user && current_user.id == answer.user_id
+
+  .answer
+    / = pluralize answer.reputation_for(:votes).to_i, "vote"
+
+    = " | "
+    = link_to "up", vote_question_answer_path(@question, answer), type: "up", method: "post"
+    = " | "
+    = link_to "down", vote_question_answer_path(@question, answer), type: "down", method: "post"

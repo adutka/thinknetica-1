@@ -16,4 +16,6 @@ class Answer < ActiveRecord::Base
     question.answers.update_all(best: false)
     update!(best: true)
   end
+
+  # has_reputation :votes, source: :question, aggregated_by: :sum
 end

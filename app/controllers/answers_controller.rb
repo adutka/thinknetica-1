@@ -6,6 +6,7 @@ class AnswersController < ApplicationController
   def index
     # @question = Question.find(params[:question_id])
     @answers = @question.answers.order('best DESC')
+    @answers = @question.answers.find_with_reputation(:votes, :all, order: 'votes DESC')
   end
 
   def create
@@ -58,6 +59,18 @@ class AnswersController < ApplicationController
       @message = "The Best answer is #{@answer.body}"
     else
       @message = "This is not your answer"
+    end
+  end
+
+  def vote
+    if @question.user == current_user
+      value = params[:type] == "up" ? 1 : -1
+      # @answers = @question.answers
+      @answer.add_or_update_evaluation(:votes, value, question_id)
+      @answers = @question.answers
+      redirect_to :back, notice: "Thank you for voting!"
+    else
+      redirect_to :back, notice: "Unable to vote!"
     end
   end
 

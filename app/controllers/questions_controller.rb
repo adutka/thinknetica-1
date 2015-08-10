@@ -63,6 +63,16 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def cancel_vote
+    if current_user && current_user.voted_for?(question)
+      value = default
+      @question.add_or_update_evaluation(:votes, value, current_user)
+      redirect_to :back, notice: "Vote canceled!"
+    else
+      redirect_to :back, notice: "Unable to cancel vote!"
+    end
+  end
+
 
 
   private

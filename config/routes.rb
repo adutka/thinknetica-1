@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :questions do
     resources :answers do
       post :best, on: :member
+      post :vote, on: :member
     end
   end
   resources :questions do
