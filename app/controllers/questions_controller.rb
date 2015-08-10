@@ -1,10 +1,10 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: [ :new, :create ]
+  before_action :authenticate_user!, only: [ :new, :create, :vote ]
   before_action :load_question, only: [:show, :edit, :update, :destroy, :vote ]
 
   def index
     # @questions = Question.all
-    @questions = Question.find_with_reputation(:votes, :all, order: "votes desc")
+    @questions = Question.find_with_reputation(:votes, :all, order: 'votes DESC')
   end
 
   def show
@@ -54,9 +54,13 @@ class QuestionsController < ApplicationController
 
 
   def vote
-    value = params[:type] == "up" ? 1 : -1
-    @question.add_evaluation(:votes, value, current_user)
-    redirect_to :back, notice: "Thank you for voting!"
+    if @question.user_id == current_user.id
+      value = params[:type] == "up" ? 1 : -1
+      @question.add_or_update_evaluation(:votes, value, current_user)
+      redirect_to :back, notice: "Thank you for voting!"
+    else
+      redirect_to :back, notice: "Unable to vote!"
+    end
   end
 
 
