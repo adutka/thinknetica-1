@@ -9,7 +9,7 @@ hr
 
 .answers
   = render @question.answers
-  = current_user.reputation_for(:votes).to_i-1
+  / = current_user.reputation_for(:votes).to_i
 
 .answer-errors
 

@@ -10,10 +10,13 @@ class Question < ActiveRecord::Base
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :all_blank
 
   has_reputation :votes, source: :user, aggregated_by: :sum
-  # has_reputation :votes, source: {reputation: :votes, of: :answers}, aggregated_by: :sum
-  # has_reputation :votes, source: :question, aggregated_by: :sum
 
-  # def voted_for?(answer)
-  #   answer.evaluations.where(source_type: "Question", source_id: question_id).present?
+  # has_many :evaluations, class_name: "RSEvaluation", as: :source
+
+  # has_reputation :votes, source: {reputation: :votes, of: "question/answers"}, aggregated_by: :sum
+
+
+  # def voted_for?(source)
+  #   answer.evaluations.where(source_type: "Question", source_id: "question_id/id").present?
   # end
 end

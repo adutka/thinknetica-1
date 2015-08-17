@@ -13,7 +13,7 @@
       <%- if user_signed_in? %>
         <%= link_to('Log out', destroy_user_session_path, method: :delete) %>
         | <%= current_user.email.to_s %>
-        | Question's votes (<%= current_user.reputation_for(:votes).to_i %>)
+        | Your reputation (<%= current_user.reputation_for(:votes).to_i %>)
       <% else %>
         <%= link_to('Log in', new_user_session_path) %>
       <% end %>

@@ -43,8 +43,10 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer = Answer.find(params[:id])
+
     @question = @answer.question
     if @answer.user_id == current_user.id
+      @answer.delete_evaluation(:votes, current_user)
       @answer.destroy
       @message = "Your answer successfully deleted."
     else
@@ -63,14 +65,25 @@ class AnswersController < ApplicationController
   end
 
   def vote
-    if @question.user == current_user
+    if current_user
       value = params[:type] == "up" ? 1 : -1
       # @answers = @question.answers
-      @answer.add_or_update_evaluation(:votes, value, question_id)
+      @answer.add_or_update_evaluation(:votes, value, current_user)
       @answers = @question.answers
       redirect_to :back, notice: "Thank you for voting!"
     else
       redirect_to :back, notice: "Unable to vote!"
+    end
+  end
+
+  def cancel_vote
+    if current_user.id && current_user.voted_for?(@answer)
+      value = params[:type] == "cancel_vote" ? 0 : 0
+      # @question.delete_evaluation(reputation_name, source)
+      @answer.delete_evaluation(:votes, current_user)
+      redirect_to :back, notice: "Vote canceled!"
+    else
+      redirect_to :back, notice: "Unable to cancel vote!"
     end
   end
 

@@ -9,14 +9,12 @@ has_many :answers
 
 has_many :evaluations, class_name: "RSEvaluation", as: :source
 
-has_reputation :votes, source: {reputation: :votes, of: :questions}, aggregated_by: :sum
+has_reputation :votes, source: [{reputation: :votes, of: :questions}, {reputation: :votes, of: :answers}], aggregated_by: :sum
+
+# has_reputation :votes, source: {reputation: :votes, of: :answers}, aggregated_by: :sum
 
 
-  def voted_for?(question)
-    question.evaluations.where(source_type: "User", source_id: id).present?
+  def voted_for?(res)
+    res.evaluations.where(source_type: "User", source_id: id).present?
   end
-
-
-
-
 end

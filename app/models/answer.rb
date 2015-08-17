@@ -10,12 +10,13 @@ class Answer < ActiveRecord::Base
 
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
-  default_scope {order('best DESC')}
+  has_reputation :votes, source: :user, aggregated_by: :sum
+
+  # default_scope {order('best DESC')}
 
   def select_best
     question.answers.update_all(best: false)
     update!(best: true)
   end
 
-  # has_reputation :votes, source: :question, aggregated_by: :sum
 end

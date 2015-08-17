@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: [ :new, :create, :vote ]
-  before_action :load_question, only: [:show, :edit, :update, :destroy, :vote ]
+  before_action :authenticate_user!, only: [ :new, :create, :vote, :cancel_vote ]
+  before_action :load_question, only: [:show, :edit, :update, :destroy, :vote, :cancel_vote ]
 
   def index
     # @questions = Question.all
@@ -43,6 +43,7 @@ class QuestionsController < ApplicationController
 
   def destroy
       if @question.user_id == current_user.id
+        @question.delete_evaluation(:votes, current_user)
         @question.destroy
         flash[:notice] = 'Question successfully deleted.'
         redirect_to questions_path
@@ -54,7 +55,7 @@ class QuestionsController < ApplicationController
 
 
   def vote
-    if @question.user_id == current_user.id
+    if current_user
       value = params[:type] == "up" ? 1 : -1
       @question.add_or_update_evaluation(:votes, value, current_user)
       redirect_to :back, notice: "Thank you for voting!"
@@ -64,9 +65,10 @@ class QuestionsController < ApplicationController
   end
 
   def cancel_vote
-    if current_user && current_user.voted_for?(question)
-      value = default
-      @question.add_or_update_evaluation(:votes, value, current_user)
+    if current_user.id
+      value = params[:type] == "cancel_vote" ? 0 : 0
+      # @question.delete_evaluation(reputation_name, source)
+      @question.delete_evaluation(:votes, current_user)
       redirect_to :back, notice: "Vote canceled!"
     else
       redirect_to :back, notice: "Unable to cancel vote!"

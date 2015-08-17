@@ -12,9 +12,13 @@ div class=(answer.best ? 'best' : '')
   = link_to "#{ answer.best ? 'Cancel Best answer' : 'Best answer' }", best_question_answer_path(@question, answer), remote: true, method: :post if current_user && current_user.id == answer.user_id
 
   .answer
-    / = pluralize answer.reputation_for(:votes).to_i, "vote"
-
+    = pluralize answer.reputation_for(:votes).to_i, "vote"
     = " | "
-    = link_to "up", vote_question_answer_path(@question, answer), type: "up", method: "post"
-    = " | "
-    = link_to "down", vote_question_answer_path(@question, answer), type: "down", method: "post"
+    -if current_user && current_user.id == answer.user_id
+    -else
+      -if current_user && !current_user.voted_for?(answer)
+        = link_to "up", vote_question_answer_path(@question, answer, type: "up"), method: "post"
+        = " | "
+        = link_to "down", vote_question_answer_path(@question, answer, type: "down"), method: "post"
+      -if current_user && current_user.voted_for?(answer)
+        = link_to "cancel_vote", cancel_vote_question_answer_path(@question, answer, type: "cancel_vote"), method: "post"

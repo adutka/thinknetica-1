@@ -6,17 +6,22 @@ h3 Questions
   ul
     li
       = link_to question.title, question_path(question)
-      -if current_user
+      -if current_user && question.user_id == current_user.id
         = " | "
         = link_to 'Delete question', question_path(question), method: :delete
 
 
     .question
       = pluralize question.reputation_for(:votes).to_i, "vote"
-      -if current_user && !current_user.voted_for?(question)
-        = " | "
-        = link_to "up", vote_question_path(question, type: "up"), method: "post"
-        = " | "
-        = link_to "down", vote_question_path(question, type: "down"), method: "post"
       = " | "
-      = link_to "cancel_vote", vote_question_path(question, type: "cancel_vote"), method: "post"
+      = question.user.email.to_s
+      = " | "
+      -if current_user && question.user_id == current_user.id
+      -else
+        -if current_user && !current_user.voted_for?(question)
+          = link_to "up", vote_question_path(question, type: "up"), method: "post"
+          = " | "
+          = link_to "down", vote_question_path(question, type: "down"), method: "post"
+
+        -if current_user && current_user.voted_for?(question)
+          = link_to "cancel_vote", cancel_vote_question_path(question, type: "cancel_vote"), method: "post"

@@ -4,10 +4,12 @@ Rails.application.routes.draw do
     resources :answers do
       post :best, on: :member
       post :vote, on: :member
+      post :cancel_vote, on: :member
     end
   end
   resources :questions do
     member { post :vote }
+    member { post :cancel_vote }
   end
   root to: "questions#index"
 
