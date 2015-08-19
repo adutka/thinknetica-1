@@ -13,11 +13,11 @@ feature 'Question like or dislike', %q{
   describe "Authenticated user sets reputations for questions" do
 
     before(:each) do
-      @user = User.create!(:email => 'jack@uu.ua', :password => '1234567890')
+      @user = FactoryGirl.create(:user, :email => 'wer@test.com', :password => '12345678')
       @question = Question.create!(:title => 'question1', :body => 'body1?',:user_id => @user.id)
 
-      @user2 = User.create(:email => 'dick@uu.ua', :password => '1234567890')
-      @user3 = User.create(:email => 'dick3@uu.ua', :password => '1234567890')
+      @user2 = FactoryGirl.create(:user, :email => 'wert@test.com', :password => '12345678')
+      @user3 = FactoryGirl.create(:user, :email => 'retret@test.com', :password => '12345678')
     end
 
     it "return 0 as a default" do
@@ -50,7 +50,7 @@ feature 'Question like or dislike', %q{
   end
 
   describe "Authenticated user can't sets reputations for owner questions" do
-    @user = User.create!(:email => 'jack@uu.ua', :password => '1234567890')
+    @user = FactoryGirl.create(:user, :email => 'retretw@test.com', :password => '12345678')
 
     it "Value of reputation unchanged for owner question" do
       expect(page).to_not have_link ("up")

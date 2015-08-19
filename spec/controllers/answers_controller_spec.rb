@@ -103,4 +103,25 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'VOTE #vote' do
+    context 'authenticated user sets votes for answers' do
+
+      it 'set reputations for answers' do
+        @request.env['HTTP_REFERER'] = 'http://localhost:3000/questions/'
+        expect { post :vote, question_id: question, id: answer, type: 'up' }.to change { answer.reputation_for(:votes) }.by(1.0)
+      end
+    end
+end
+
+
+  describe 'Cancel VOTE #cancel_vote' do
+    context 'authenticated user cancel votes for answers' do
+      it 'cancel reputations for questions' do
+        @request.env['HTTP_REFERER'] = 'http://localhost:3000/questions/'
+        expect { post :vote, question_id: question, id: answer }.to change { answer.reputation_for(:votes) }.by(-1.0)
+        expect { post :cancel_vote, question_id: question, id: answer, type: 'cancel_vote' }.to change { answer.reputation_for(:votes) }.by(1.0)
+      end
+    end
+  end
 end

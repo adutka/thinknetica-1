@@ -75,7 +75,6 @@ expect(assigns(:question)).to eq question
 
   describe 'POST #create' do
     sign_in
-    # let(:question) { create(:question) }
 
     context 'with valid attributes' do
       it 'saves the new question in the database' do
@@ -202,9 +201,6 @@ expect(assigns(:question)).to eq question
       let(:question) { create(:question, user: user) }
 
       it 'cancel reputations for questions' do
-        # question.add_or_update_evaluation(:votes, -1, user)
-        # question.delete_evaluation(:votes, user)
-        # expect(question.reputation_for(:votes)).to eq(0)
         @request.env['HTTP_REFERER'] = 'http://localhost:3000/questions/'
         expect { post :vote, id: question }.to change { question.reputation_for(:votes) }.by(-1.0)
         expect { post :cancel_vote, id: question, type: 'cancel_vote' }.to change { question.reputation_for(:votes) }.by(1.0)
