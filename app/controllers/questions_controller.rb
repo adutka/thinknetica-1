@@ -66,7 +66,7 @@ class QuestionsController < ApplicationController
 
   def cancel_vote
     if current_user.id
-      value = params[:type] == "cancel_vote" ? 0 : 0
+      value = params[:type] == "cancel_vote" ? 0 : nil
       # @question.delete_evaluation(reputation_name, source)
       @question.delete_evaluation(:votes, current_user)
       redirect_to :back, notice: "Vote canceled!"
