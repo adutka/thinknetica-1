@@ -3,17 +3,19 @@ Rails.application.routes.draw do
   resources :questions do
     resources :answers do
       post :best, on: :member
-      post :vote, on: :member
+      post :vote_up, on: :member
+      post :vote_down, on: :member
       post :cancel_vote, on: :member
     end
   end
   resources :questions do
-    member { post :vote }
+    member { post :vote_up }
+    member { post :vote_down }
     member { post :cancel_vote }
   end
   root to: "questions#index"
 
-  resources :answers, only: [:destroy]
+  resources :answers, only: [:create, :update, :destroy, :vote_up, :vote_down, :cancel_vote]
 
 
 

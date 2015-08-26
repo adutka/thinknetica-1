@@ -2,8 +2,12 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
+  let(:user2) { create(:user) }
   let(:question) { create(:question, user: user) }
   let(:answer) { create(:answer, question: question, user: user) }
+
+  let(:votable) { create(described_class.controller_name.singularize.underscore, question: question, user: user) }
+  let(:vote) { create(:vote, votable: votable, user: user2) }
 
   before { sign_in(user) }
 
@@ -104,23 +108,28 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'VOTE #vote' do
-    context 'authenticated user sets votes for answers' do
-
-      it 'set reputations for answers' do
-        @request.env['HTTP_REFERER'] = 'http://localhost:3000/questions/'
-        expect { post :vote, question_id: question, id: answer, type: 'up' }.to change { answer.reputation_for(:votes) }.by(1.0)
+  describe 'POST #vote_up' do
+    before { sign_in(user2) }
+    context 'non-owner of answer' do
+      it 'changes the vote, score 1' do
+        expect { post :vote_up, id: answer, format: :json }.to change(Vote, :count).by(1)
       end
     end
-end
-
-
-  describe 'Cancel VOTE #cancel_vote' do
-    context 'authenticated user cancel votes for answers' do
-      it 'cancel reputations for questions' do
-        @request.env['HTTP_REFERER'] = 'http://localhost:3000/questions/'
-        expect { post :vote, question_id: question, id: answer }.to change { answer.reputation_for(:votes) }.by(-1.0)
-        expect { post :cancel_vote, question_id: question, id: answer, type: 'cancel_vote' }.to change { answer.reputation_for(:votes) }.by(1.0)
+  end
+  describe 'POST #vote_down' do
+    before { sign_in(user2) }
+    context 'non-owner of answer' do
+      it 'changes the vote, score -1' do
+        expect { post :vote_down, id: answer, format: :json }.to change(Vote, :count).by(1)
+      end
+    end
+  end
+  describe 'DELETE #cancel_vote' do
+    before { sign_in(user2) }
+    before { vote }
+    context 'non-owner of answer' do
+      it 'cancels the vote' do
+        expect { delete :cancel_vote, id: votable, format: :json }.to change(Vote, :count).by(-1)
       end
     end
   end

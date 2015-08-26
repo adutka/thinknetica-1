@@ -1,7 +1,11 @@
 require 'rails_helper'
 
 describe QuestionsController do
-  let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  let(:user2) { create(:user) }
+  let(:question) { create(:question, user: user) }
+  let(:votable) { create(described_class.controller_name.singularize.underscore) }
+  let(:vote) { create(:vote, votable: votable, user: user2) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
@@ -171,50 +175,30 @@ expect(assigns(:question)).to eq question
     end
   end
 
-  describe 'VOTE #vote' do
-    context 'sets votes for authenticated user' do
-      sign_in
-      let(:user) { create(:user) }
-      let(:question) { create(:question, user: user) }
-      it 'set reputations for questions' do
-        @request.env['HTTP_REFERER'] = 'http://localhost:3000/questions/'
-        expect { post :vote, id: question, type: 'up' }.to change { question.reputation_for(:votes) }.by(1.0)
+  describe 'POST #vote_up' do
+    before { sign_in(user2) }
+    context 'non-owner of question' do
+      it 'changes the vote, score 1' do
+        expect { post :vote_up, id: question, format: :json }.to change(Vote, :count).by(1)
       end
     end
-
-    context 'Non-authenticated user tries sets votes for question' do
-      let(:user) { create(:user) }
-      let(:question) { create(:question, user: user) }
-      it 'unchanged reputations for questions' do
-        @request.env['HTTP_REFERER'] = 'http://localhost:3000/questions/'
-        expect { post :vote, id: question, type: 'up' }.to change { question.reputation_for(:votes) }.by(0.0)
-        expect { post :vote, id: question, type: 'down' }.to change { question.reputation_for(:votes) }.by(0.0)
+  end
+  describe 'POST #vote_down' do
+    before { sign_in(user2) }
+    context 'non-owner of question' do
+      it 'changes the vote, score -1' do
+        expect { post :vote_down, id: question, format: :json }.to change(Vote, :count).by(1)
+      end
+    end
+  end
+  describe 'DELETE #cancel_vote' do
+    before { sign_in(user2) }
+    before { vote }
+    context 'non-owner of question' do
+      it 'cancels the vote' do
+        expect { delete :cancel_vote, id: votable, format: :json }.to change(Vote, :count).by(-1)
       end
     end
   end
 
-  describe 'Cancel VOTE #cancel_vote' do
-
-    context 'authenticated user cancel votes for questions' do
-      sign_in
-      let(:user) { create(:user) }
-      let(:question) { create(:question, user: user) }
-
-      it 'cancel reputations for questions' do
-        @request.env['HTTP_REFERER'] = 'http://localhost:3000/questions/'
-        expect { post :vote, id: question }.to change { question.reputation_for(:votes) }.by(-1.0)
-        expect { post :cancel_vote, id: question, type: 'cancel_vote' }.to change { question.reputation_for(:votes) }.by(1.0)
-
-      end
-    end
-
-    context 'Non-authenticated user tries sets votes for question' do
-      let(:user) { create(:user) }
-      let(:question) { create(:question, user: user) }
-      it 'uncanceled reputations for questions' do
-        @request.env['HTTP_REFERER'] = 'http://localhost:3000/questions/'
-        expect { post :cancel_vote, id: question, type: 'cancel_vote' }.to change { question.reputation_for(:votes) }.by(0.0)
-      end
-    end
-  end
 end

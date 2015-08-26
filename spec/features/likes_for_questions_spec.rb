@@ -6,66 +6,79 @@ feature 'Question like or dislike', %q{
   I want to select good or bad question
 } do
 
-  before(:each) do
-    visit questions_path
-  end
+  given!(:user) { create(:user) }
+  given!(:user1){ create(:user) }
+  given!(:user2) { create(:user) }
+  given!(:question) { create(:question, user: user) }
 
-  describe "Authenticated user sets reputations for questions" do
-
-    before(:each) do
-      @user = FactoryGirl.create(:user, :email => 'wer@test.com', :password => '12345678')
-      @question = Question.create!(:title => 'question1', :body => 'body1?',:user_id => @user.id)
-
-      @user2 = FactoryGirl.create(:user, :email => 'wert@test.com', :password => '12345678')
-      @user3 = FactoryGirl.create(:user, :email => 'retret@test.com', :password => '12345678')
-    end
-
-    it "return 0 as a default" do
-      expect(@question.reputation_for(:votes)).to eq(0)
-    end
-
-    it "return appropriate value in case of valid input UP" do
-      expect(page).to_not have_link ("cancel_vote")
-      @question.add_or_update_evaluation(:votes, 1, @user2)
-      @question.add_or_update_evaluation(:votes, 1, @user3)
-      expect(@question.reputation_for(:votes)).to eq(2)
-
-    end
-
-    it "return appropriate value in case of valid input DOWN" do
-      expect(page).to_not have_link ("cancel_vote")
-      @question.add_or_update_evaluation(:votes, -1, @user2)
-      @question.add_or_update_evaluation(:votes, -1, @user3)
-      expect(@question.reputation_for(:votes)).to eq(-2)
-    end
-
-    it "cancel votes" do
-      expect(page).to_not have_link ("up")
-      expect(page).to_not have_link ("down")
-      expect(page).to_not have_link ("cancel_vote")
-      @question.delete_evaluation(:votes, @user2)
-      @question.delete_evaluation(:votes, @user3)
-      expect(@question.reputation_for(:votes)).to eq(0)
+  scenario 'unauthenticated user tries to vote the question' do
+    visit question_path(question)
+    within '.question' do
+      expect(page).to_not have_link "Like"
     end
   end
 
-  describe "Authenticated user can't sets reputations for owner questions" do
-    @user = FactoryGirl.create(:user, :email => 'retretw@test.com', :password => '12345678')
-
-    it "Value of reputation unchanged for owner question" do
-      expect(page).to_not have_link ("up")
-      expect(page).to_not have_link ("down")
-      expect(page).to_not have_link ("cancel_vote")
+  describe 'Authenticated user' do
+    scenario 'can see link Like or Dislike' do
+      sign_in(user1)
+      visit question_path(question)
+      within '.question' do
+        expect(page).to have_link 'Like'
+        expect(page).to have_link 'Dislike'
+      end
     end
-  end
 
-  describe "Non-authenticated user can't sets reputations for questions" do
-    given!(:questions) { create_list(:question, 3) }
-    it "Value of reputation unchanged for question" do
-      questions.each do |question|
-        expect(page).to_not have_link ("up")
-        expect(page).to_not have_link ("down")
-        expect(page).to_not have_link ("cancel_vote")
+    scenario 'as author of question tries to vote question', js: true do
+      sign_in(user)
+      visit question_path(question)
+      expect(page).to_not have_link "Like"
+      expect(page).to_not have_link "Dislike"
+    end
+
+    scenario "tries to vote somebody's question by clicking Like", js: true do
+      sign_in(user1)
+      visit question_path(question)
+      within '.question' do
+        click_on 'Like'
+        expect(page).to have_content "1"
+        expect(page).to_not have_link "Like"
+        expect(page).to_not have_link "Dislike"
+        expect(page).to have_link "Cancel Vote"
+      end
+    end
+
+    scenario "tries to vote somebody's question by clicking Dislike", js: true do
+      sign_in(user1)
+      visit question_path(question)
+      within '.question' do
+        click_on 'Dislike'
+        expect(page).to have_content "-1"
+        expect(page).to_not have_link "Like"
+        expect(page).to_not have_link "Dislike"
+        expect(page).to have_link "Cancel Vote"
+      end
+    end
+
+    scenario "2 users vote to somebody's question by clicking Like", js: true do
+      sign_in(user1)
+      visit question_path(question)
+      within '.question' do
+        click_on 'Like'
+        expect(page).to have_content "1"
+        expect(page).to_not have_link "Like"
+        expect(page).to_not have_link "Dislike"
+        expect(page).to have_link "Cancel Vote"
+      end
+
+      sign_out(user1)
+      sign_in(user2)
+      visit question_path(question)
+      within '.question' do
+        click_on 'Like'
+        expect(page).to have_content "2"
+        expect(page).to_not have_link "Like"
+        expect(page).to_not have_link "Dislike"
+        expect(page).to have_link "Cancel Vote"
       end
     end
   end

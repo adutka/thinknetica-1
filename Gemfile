@@ -28,7 +28,7 @@ gem "awesome_print"
 gem 'carrierwave'
 gem "nested_form"
 
-gem 'activerecord-reputation-system', require: 'reputation_system' #for like dislike
+# gem 'activerecord-reputation-system', require: 'reputation_system' #for like dislike
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
